@@ -4,7 +4,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name www.cybercrisisgame.frl cybercrisisgame.frl;
+    server_name portal.cybercrisisgame.frl;
 
     # Only allow GET, HEAD, POST
     if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
@@ -41,13 +41,13 @@ server {
 
     # Apple support...
     if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
-        return 302 http://go.rogueportal;
+        return 302 http://portal.cybercrisisgame.frl;
     }
 
     # Samsung handling missery...(not yet implemented)
 
     # Any other sane device.
     location / {
-        return 302 http://go.rogueportal;
+        return 302 http://portal.cybercrisisgame.frl;
     }
 }

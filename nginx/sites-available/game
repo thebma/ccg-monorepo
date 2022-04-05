@@ -1,14 +1,14 @@
 server {
-    listen 8003;
-    listen [::]:8003;
-    server_name www.cybercrisisgame.frl cybercrisisgame.frl;
+    listen 80;
+    listen [::]:80;
+    server_name www.game.cybercrisisgame.frl game.cybercrisisgame.frl;
 
     # Only allow GET, HEAD, POST
     if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
 
     # Logs
-    access_log /var/log/ccg/admin.access.log;
-    error_log /var/log/ccg/admin.error.log warn;
+    access_log /var/log/ccg/game.access.log;
+    error_log /var/log/ccg/game.error.log warn;
 
     root /var/www/game_website;
     index index.php;
