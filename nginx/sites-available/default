@@ -1,10 +1,8 @@
 # This is the captive portal + redirect, corresponds to /var/www/captive_portal.
 
-# Handle any "cybercrisisgame.frl" requests.
 server {
-    listen 80;
-    listen [::]:80;
-    server_name portal.cybercrisisgame.frl;
+    listen 8001;
+    listen [::]:8001;
 
     # Only allow GET, HEAD, POST
     if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
@@ -41,13 +39,13 @@ server {
 
     # Apple support...
     if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
-        return 302 http://portal.cybercrisisgame.frl;
+        return 302 http://10.0.1.1:8001;
     }
 
     # Samsung handling missery...(not yet implemented)
 
     # Any other sane device.
     location / {
-        return 302 http://portal.cybercrisisgame.frl;
+        return 302 http://10.0.1.1:8001;
     }
 }

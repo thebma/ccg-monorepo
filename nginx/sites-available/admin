@@ -1,7 +1,6 @@
 server {
-    listen 80;
-    listen [::]:80;
-    server_name www.admin.cybercrisisgame.frl admin.cybercrisisgame.frl;
+    listen 8002;
+    listen [::]:8002;
 
     # Only allow GET, HEAD, POST
     if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
