@@ -1,0 +1,27 @@
+server {
+    listen 8001;
+    listen [::]:8001;
+    server_name www.cybercrisisgame.frl cybercrisisgame.frl
+
+    # Only allow GET, HEAD, POST
+    if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
+
+    # Logs
+    access_log /var/log/ccg/admin.access.log;
+    error_log /var/log/ccg/admin.error.log warn;
+
+    root /var/www/admin_website;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    #This website could do without PHP btw.
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    }
+
+    error_page 401 403 404 =200 /index.php;
+}

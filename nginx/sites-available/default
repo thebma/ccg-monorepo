@@ -1,0 +1,53 @@
+# This is the captive portal + redirect, corresponds to /var/www/captive_portal.
+
+# Handle any "cybercrisisgame.frl" requests.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name www.cybercrisisgame.frl cybercrisisgame.frl
+
+    # Only allow GET, HEAD, POST
+    if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
+
+    # Logs
+    access_log /var/log/ccg/portal.access.log;
+    error_log /var/log/ccg/portal.error.log warn;
+
+    root /var/www/captive_portal;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    }
+
+    error_page 401 403 404 =200 /index.php;
+}
+
+# Handle any request that hasn't been handled by other NGINX files.
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    if ($request_method !~ ^(GET|HEAD|POST)$) { return 444; }
+
+    access_log /var/log/ccg/portal_redir.access.log;
+    error_log /var/log/ccg/portal_redir.error.log warn;
+
+    # Apple support...
+    if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
+        return 302 http://go.rogueportal;
+    }
+
+    # Samsung handling missery...(not yet implemented)
+
+    # Any other sane device.
+    location / {
+        return 302 http://go.rogueportal;
+    }
+}

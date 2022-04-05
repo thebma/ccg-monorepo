@@ -8,8 +8,15 @@ fi
 SSIDRANDOM=`tr -dc A-Z0-9 </dev/urandom | head -c 5`
 SSID="CyberCrisisGame-$SSIDRANDOM"
 
-#Overwrite the ssid=... value in /etc/hostapd/hostapd.conf
+PASSWORD=`tr -dc a-zA-Z0-9 </dev/urandom | head -c 8`
+
+#Let the console know the new credentals...
+echo "SSID is $SSID with password $PASSWORD..."
+
+#Overwrite the ssid=... & wpa_passphrase value in /etc/hostapd/hostapd.conf
 sed -i "s/^ssid=.*/${SSID}/" /etc/hostapd/hostapd.conf
+sed -i "s/^wpa_passphrase=.*/${PASSWORD}/" /etc/hostapd/hostapd.conf
 
 #Restart service...
 sudo systemctl restart hostapd
+
